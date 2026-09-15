@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRIP WIRE - Key System Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-color: #09090b;
+            --card-bg: #121215;
+            --card-border: #222228;
+            --accent-purple: #8b5cf6;
+            --accent-purple-hover: #7c3aed;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-logo img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4));
+        }
+
+        .header-logo h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #18181b;
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 30px;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-purple);
+            color: #fff;
+        }
+
+        .container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 750px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-box, .select-box {
+            width: 100%;
+            padding: 14px 16px;
+            background: #18181c;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-box:focus, .select-box:focus { border-color: var(--accent-purple); }
+
+        .duration-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-purple);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover { background: var(--accent-purple-hover); }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: #18181c;
+            border: 1px dashed var(--accent-purple);
+            border-radius: 10px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-key {
+            font-weight: 700;
+            color: #38bdf8;
+            font-size: 15px;
+        }
+
+        .btn-copy {
+            background: #27272a;
+            border: none;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #18181c;
+            border: 1px solid var(--card-border);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .table-container { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th { color: var(--text-muted); font-weight: 600; }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .badge-unused { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .badge-active { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .badge-expired { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    </style>
+</head>
+<body>
+
+    <div class="header-logo">
+        <img src="https://files.catbox.moe/g205lv.png" alt="DRIP CLIENT LOGO">
+        <h1>DRIP WIRE</h1>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('generate', event)"><i data-lucide="key"></i> Generate Key</button>
+        <button class="tab-btn" onclick="switchTab('manage', event)"><i data-lucide="layout-dashboard"></i> Manage Keys</button>
+        <button class="tab-btn" onclick="switchTab('reseller', event)"><i data-lucide="shield-check"></i> Reseller Panel</button>
+    </div>
+
+    <div class="container">
+        <!-- TAB 1: GENERATE KEY -->
+        <div id="generate" class="tab-content active">
+            <div class="form-group">
+                <label>Key Name Custom</label>
+                <input type="text" id="genName" class="input-box" placeholder="e.g. VIP-USER">
+            </div>
+
+            <div class="form-group">
+                <label>Duration</label>
+                <div class="duration-grid">
+                    <input type="number" id="genVal" class="input-box" value="1" min="1">
+                    <select id="genType" class="select-box" onchange="toggleDurationVal(this.value, 'genVal')">
+                        <option value="minutes">Minutes</option>
+                        <option value="hours">Hours</option>
+                        <option value="days" selected>Days</option>
+                        <option value="months">Months</option>
+                        <option value="years">Years</option>
+                        <option value="permanent">Permanent (ถาวร)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-submit" onclick="submitGenerate()"><i data-lucide="plus-circle"></i> Generate Key</button>
+
+            <div id="genResult" class="result-box">
+                <span id="genKeyText" class="result-key">---</span>
+                <button class="btn-copy" onclick="copyText('genKeyText')"><i data-lucide="copy"></i> Copy</button>
+            </div>
+        </div>
+
+        <!-- TAB 2: MANAGE KEYS -->
+        <div id="manage" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p>TOTAL KEYS</p>
+                    <h3 id="statTotal">0</h3>
+                </div>
+                <div class="stat-card">
+                    <p>ACTIVATED</p>
+                    <h3 id="statActive" style="color: #4ade80;">0</h3>
+                </div>
+                <div class="stat-card">
+                    <p>EXPIRED</p>
+                    <h3 id="statExpired" style="color: #f87171;">0</h3>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Activated At</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keysTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: RESELLER PANEL -->
+        <div id="reseller" class="tab-content">
+            <div class="form-group">
+                <label>Reseller Key Tag / Customer Name</label>
+                <input type="text" id="resellerName" class="input-box" placeholder="Customer Name">
+            </div>
+
+            <div class="form-group">
+                <label>Plan Selection</label>
+                <select id="resellerPlan" class="select-box">
+                    <option value="1month">1 Month (1 เดือน)</option>
+                    <option value="permanent">Permanent (ถาวร)</option>
+                </select>
+            </div>
+
+            <button class="btn-submit" onclick="submitReseller()"><i data-lucide="zap"></i> Generate Reseller Key</button>
+
+            <div id="resellerResult" class="result-box">
+                <span id="resellerKeyText" class="result-key">---</span>
+                <button class="btn-copy" onclick="copyText('resellerKeyText')"><i data-lucide="copy"></i> Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function switchTab(tabId, event) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+
+            if (tabId === 'manage') loadDashboardData();
+        }
+
+        function toggleDurationVal(type, valInputId) {
+            const valInput = document.getElementById(valInputId);
+            valInput.style.display = (type === 'permanent') ? 'none' : 'block';
+        }
+
+        async function submitGenerate() {
+            const customName = document.getElementById('genName').value;
+            const durationType = document.getElementById('genType').value;
+            const durationValue = document.getElementById('genVal').value;
+
+            const res = await fetch('/api/keys/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ customName, durationType, durationValue })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                document.getElementById('genKeyText').innerText = data.data.key;
+                document.getElementById('genResult').style.display = 'flex';
+            }
+        }
+
+        async function submitReseller() {
+            const customName = document.getElementById('resellerName').value;
+            const plan = document.getElementById('resellerPlan').value;
+
+            const res = await fetch('/api/keys/reseller-generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ customName, plan })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                document.getElementById('resellerKeyText').innerText = data.data.key;
+                document.getElementById('resellerResult').style.display = 'flex';
+            }
+        }
+
+        async function loadDashboardData() {
+            const res = await fetch('/api/keys/list');
+            const data = await res.json();
+
+            document.getElementById('statTotal').innerText = data.stats.total;
+            document.getElementById('statActive').innerText = data.stats.activated;
+            document.getElementById('statExpired').innerText = data.stats.expired;
+
+            const tbody = document.getElementById('keysTableBody');
+            tbody.innerHTML = '';
+
+            data.keys.forEach(k => {
+                let badgeClass = 'badge-unused';
+                if (k.status === 'Active') badgeClass = 'badge-active';
+                if (k.status === 'Expired') badgeClass = 'badge-expired';
+
+                const actTime = k.activatedAt ? new Date(k.activatedAt).toLocaleString() : 'Not Yet Activated';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="font-weight:700; color:#38bdf8;">${k.key}</td>
+                        <td>${k.customName}</td>
+                        <td><span class="badge ${badgeClass}">${k.status}</span></td>
+                        <td style="color:#a1a1aa;">${actTime}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text);
+            alert('Copied Key to Clipboard!');
+        }
+    </script>
+</body>
+</html>
